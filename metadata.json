@@ -1,0 +1,9 @@
+{
+  "name": "AgroConnect",
+  "description": "Standalone agricultural marketplace for Cameroon with persistent client-side storage and Gemini 3 AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

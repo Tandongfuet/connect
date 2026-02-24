@@ -1,0 +1,22 @@
+import React from 'react';
+
+const MessageFeedSkeleton: React.FC = () => (
+    <div className="flex-1 p-6 overflow-y-auto animate-pulse">
+        <div className="flex flex-col gap-4">
+            <div className="flex items-end gap-2.5 max-w-lg self-start">
+                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex-shrink-0"></div>
+                <div className="h-16 bg-gray-300 dark:bg-gray-700 rounded-xl rounded-bl-none w-48"></div>
+            </div>
+            <div className="flex items-end gap-2.5 max-w-lg self-end">
+                <div className="h-20 bg-gray-300 dark:bg-gray-700 rounded-xl rounded-br-none w-64"></div>
+                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex-shrink-0"></div>
+            </div>
+            <div className="flex items-end gap-2.5 max-w-lg self-start">
+                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex-shrink-0"></div>
+                <div className="h-12 bg-gray-300 dark:bg-gray-700 rounded-xl rounded-bl-none w-32"></div>
+            </div>
+        </div>
+    </div>
+);
+
+export default MessageFeedSkeleton;

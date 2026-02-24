@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroConnect</title>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+
+    <meta name="description" content="A comprehensive platform connecting farmers, buyers, and service providers in the agricultural sector in Cameroon." />
+    <meta name="keywords" content="Cameroon agriculture, fresh produce, local farmers, farm services, e-commerce" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Main Application Script -->
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React Crop CSS (Async loading) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-image-crop/dist/ReactCrop.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-image-crop/dist/ReactCrop.css" /></noscript>
+    
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : 'YOUR_FACEBOOK_APP_ID', // Placeholder App ID
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v20.0'
+        });
+        FB.AppEvents.logPageView();   
+      };
+    </script>
+
+    <!-- Tailwind CSS Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { light: '#A5D6A7', DEFAULT: '#4CAF50', dark: '#388E3C' },
+                        secondary: { DEFAULT: '#F5F5DC' },
+                        accent: { DEFAULT: '#FFEB3B' },
+                        dark: { bg: '#121212', surface: '#1E1E1E', border: '#2C2C2C', text: '#E0E0E0', muted: '#9E9E9E' },
+                        'slate-dark': '#2E2E2E',
+                        'gray-muted': '#757575',
+                        'cream-light': '#FAFAF0',
+                        'olive-light': '#C5E1A5',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'fade-in-left': 'fadeInLeft 0.5s ease-in-out',
+                        'fade-in-right': 'fadeInRight 0.5s ease-in-out',
+                        'fade-in-down': 'fadeInDown 0.2s ease-out',
+                        'pop-in': 'popIn 0.3s ease-out',
+                        'check-pop': 'checkPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                        'pulse-subtle': 'pulse-subtle 2s infinite',
+                        'slide': 'slide 30s linear infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: 0, transform: 'translateY(10px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        fadeInLeft: {
+                            '0%': { opacity: 0, transform: 'translateX(-20px)' },
+                            '100%': { opacity: 1, transform: 'translateX(0)' },
+                        },
+                        fadeInRight: {
+                           '0%': { opacity: 0, transform: 'translateX(20px)' },
+                           '100%': { opacity: 1, transform: 'translateX(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: 0, transform: 'translateY(-10px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        popIn: {
+                            '0%': { opacity: 0, transform: 'scale(0.95)' },
+                            '100%': { opacity: 1, transform: 'scale(1)' },
+                        },
+                        checkPop: {
+                            '0%': { opacity: 0, transform: 'scale(0)' },
+                            '100%': { opacity: 1, transform: 'scale(1)' },
+                        },
+                        'pulse-subtle': {
+                            '0%': { boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.7)' },
+                            '70%': { boxShadow: '0 0 0 8px rgba(76, 175, 80, 0)' },
+                            '100%': { boxShadow: '0 0 0 0 rgba(76, 175, 80, 0)' },
+                        },
+                        slide: {
+                            'from': { transform: 'translateX(0)' },
+                            'to': { transform: 'translateX(-100%)' },
+                        },
+                    }
+                },
+            },
+        }
+    </script>
+    
+    <!-- Custom CSS Styles -->
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-cream-light text-slate-dark antialiased dark:bg-dark-bg dark:text-dark-text;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                @apply font-sans dark:text-dark-text;
+            }
+            .input, input, textarea, select {
+                @apply block w-full px-3 py-2 bg-white border border-olive-light rounded-md text-sm shadow-sm placeholder-gray-400
+                       focus:outline-none focus:border-primary-dark focus:ring-2 focus:ring-primary-light disabled:bg-gray-50 disabled:cursor-not-allowed text-slate-dark
+                       dark:bg-dark-surface dark:border-dark-border dark:placeholder-dark-muted dark:text-dark-text dark:focus:ring-primary dark:focus:border-primary;
+            }
+             .label {
+                 @apply block text-sm font-medium text-slate-dark mb-1 dark:text-dark-text;
+             }
+        }
+        @layer components {
+            .btn {
+                @apply inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-150 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none;
+            }
+            .btn-sm {
+                @apply px-3 py-1 text-xs;
+            }
+            .btn-primary {
+                @apply text-white bg-primary hover:bg-primary-dark focus:ring-primary;
+            }
+            .btn-secondary {
+                @apply text-slate-dark bg-gray-200 hover:bg-gray-300 focus:ring-gray-400 dark:bg-dark-border dark:text-dark-text dark:hover:bg-gray-600;
+            }
+            .btn-danger {
+                @apply text-white bg-red-600 hover:bg-red-700 focus:ring-red-500;
+            }
+            .btn-ghost {
+                 @apply text-slate-dark bg-transparent hover:bg-secondary focus:ring-primary dark:text-dark-muted dark:hover:bg-dark-surface dark:hover:text-dark-text;
+            }
+             .btn-light {
+                @apply text-slate-dark bg-accent hover:bg-yellow-400 focus:ring-accent;
+            }
+            .btn:disabled {
+                 @apply bg-gray-300 text-gray-500 border-gray-300 dark:bg-gray-700 dark:text-dark-muted dark:border-gray-700;
+            }
+            .error-text {
+                @apply text-red-600 text-sm mt-1 flex items-center gap-1;
+            }
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-calendar, #printable-calendar * {
+                visibility: visible;
+            }
+            #printable-calendar {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+        /* Custom styles for ReactCrop to match theme */
+        .ReactCrop__selection {
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+        }
+        .ReactCrop__rule-of-thirds-vt::before,
+        .ReactCrop__rule-of-thirds-vt::after,
+        .ReactCrop__rule-of-thirds-hz::before,
+        .ReactCrop__rule-of-thirds-hz::after {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        .ReactCrop__drag-handle {
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+        /* Additional Tailwind overrides if needed */
+    </style>
+  <script type="module" crossorigin src="/assets/index-CBQO4Ma0.js"></script>
+</head>
+<body class="bg-cream-light dark:bg-dark-bg text-slate-dark dark:text-dark-text">
+    <div id="root"></div>
+</body>
+</html>
