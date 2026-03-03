@@ -1,5 +1,5 @@
 import express from 'express';
-import { getEvents, getBadges, getTestimonials } from '../controllers/publicController';
+import { getEvents, getBadges, getTestimonials, globalSearch, submitContact } from '../controllers/publicController';
 
 const router = express.Router();
 

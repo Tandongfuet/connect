@@ -86,7 +86,7 @@ const getSemanticKeywords = asyncHandler(async (req: Request, res: Response) => 
             model: 'gemini-3-flash-preview',
             contents: `Given the search query "${query}", provide 3-4 related keywords or synonyms relevant to agriculture in Cameroon. Return a comma-separated list. For example, for "potatoes", you might return "tubers, fufu, highland crops".`
         });
-        res.json({ keywords: response.text.split(',').map(k => k.trim()) });
+        res.json({ keywords: response.text.split(',').map((k: string) => k.trim()) });
     } catch (error) {
         console.error('AI keyword generation error:', error);
         // Fallback: just return the original query as the only keyword

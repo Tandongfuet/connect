@@ -80,8 +80,6 @@ const toggleFollow = asyncHandler(async (req: Request, res: Response) => {
         targetUser.followers.push(currentUser._id as any);
     }
 
-    targetUser.followerCount = targetUser.followers.length;
-
     await currentUser.save();
     await targetUser.save();
 
@@ -179,10 +177,11 @@ const getWishlist = asyncHandler(async (req: Request, res: Response) => {
 // @access  Private
 const addToWishlist = asyncHandler(async (req: Request, res: Response) => {
     const { listingId } = req.body;
-    const user = req.user!;
+    const user = await User.findById(req.user!._id);
+    if (!user) { res.status(404); throw new Error('User not found'); }
     
     if (!user.wishlist.includes(listingId)) {
-        user.wishlist.push(listingId);
+        user.wishlist.push(listingId as any);
         await user.save();
     }
     res.status(200).json({ message: 'Added to wishlist' });
@@ -193,7 +192,8 @@ const addToWishlist = asyncHandler(async (req: Request, res: Response) => {
 // @access  Private
 const removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
     const { listingId } = req.params;
-    const user = req.user!;
+    const user = await User.findById(req.user!._id);
+    if (!user) { res.status(404); throw new Error('User not found'); }
 
     user.wishlist = user.wishlist.filter(id => id.toString() !== listingId);
     await user.save();

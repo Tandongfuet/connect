@@ -93,8 +93,10 @@ export const getOrderById = asyncHandler(async (req: Request, res: Response) => 
 
   if (order) {
     // Security Check: Ensure user is buyer, one of the sellers, or admin
-    const isBuyer = order.buyerInfo.id._id.toString() === req.user!._id.toString();
-    const isSeller = order.sellerOrders.some(so => so.sellerId._id.toString() === req.user!._id.toString());
+    const buyerId = order.buyerInfo && (isPopulated(order.buyerInfo.id) ? order.buyerInfo.id._id.toString() : order.buyerInfo.id.toString());
+    if (!buyerId) { res.status(400); throw new Error('Order missing buyer info'); }
+    const isBuyer = buyerId === req.user!._id.toString();
+    const isSeller = order.sellerOrders.some(so => (so.sellerId as any)?._id?.toString ? (so.sellerId as any)._id.toString() === req.user!._id.toString() : so.sellerId.toString() === req.user!._id.toString());
     const isAdmin = req.user!.role === Role.Admin;
 
     if (isBuyer || isSeller || isAdmin) {
@@ -122,7 +124,7 @@ const payForOrder = asyncHandler(async (req: Request, res: Response) => {
     }
     
     // Ensure only the buyer can pay
-    if (order.buyerInfo.id.toString() !== user._id.toString()) {
+    if (order.buyerInfo?.id?.toString() !== user._id.toString()) {
          res.status(403);
          throw new Error('Not authorized to pay for this order');
     }
@@ -214,7 +216,8 @@ const updateOrderStatus = asyncHandler(async (req: Request, res: Response) => {
     }
 
     // --- Authorization ---
-    const buyerId = isPopulated(order.buyerInfo.id) ? order.buyerInfo.id._id.toString() : order.buyerInfo.id.toString();
+    const buyerId = order.buyerInfo ? (isPopulated(order.buyerInfo.id) ? order.buyerInfo.id._id.toString() : order.buyerInfo.id.toString()) : '';
+    if (!buyerId) { res.status(400); throw new Error('Order missing buyer info'); }
     const isSellerOfOrder = req.user!._id.toString() === sellerId;
     const isBuyerOfOrder = req.user!._id.toString() === buyerId;
     

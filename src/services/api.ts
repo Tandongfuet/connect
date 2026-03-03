@@ -104,6 +104,14 @@ export const getListingReviews = (id: string) =>
 export const submitListingReview = (id: string, review: any) =>
   withFallback(http.post(`/listings/${id}/reviews`, review).then(r => r.data), () => mock.mockSubmitListingReview(id, review));
 
+// Wishlist / Favorites (wrapped with network fallback)
+export const getWishlist = (userId: string) =>
+  withFallback(http.get(`/users/${userId}/wishlist`).then(r => r.data), () => mock.mockGetWishlist(userId));
+export const addToWishlist = (userId: string, listingId: string) =>
+  withFallback(http.post(`/users/${userId}/wishlist`, { listingId }).then(r => r.data), () => mock.mockAddToWishlist(userId, listingId));
+export const removeFromWishlist = (userId: string, listingId: string) =>
+  withFallback(http.delete(`/users/${userId}/wishlist/${listingId}`).then(r => r.data), () => mock.mockRemoveFromWishlist(userId, listingId));
+
 // Orders
 export const createOrder = (order: any) =>
   withFallback(http.post('/orders', order).then(r => r.data), () => mock.mockCreateOrder(order));
@@ -159,6 +167,8 @@ export const submitDisputeForBooking = (bookingId: string, data: any) =>
   withFallback(http.post(`/disputes/booking/${bookingId}`, data).then(r => r.data), () => mock.mockSubmitDisputeForBooking(bookingId, data));
 export const addMessageToDispute = (disputeId: string, message: any) =>
   withFallback(http.post(`/disputes/${disputeId}/message`, message).then(r => r.data), () => mock.mockAddMessageToDispute(disputeId, message));
+export const addEvidenceToDispute = (disputeId: string, imageUrl: string) =>
+  withFallback(http.post(`/disputes/${disputeId}/evidence`, { imageUrl }).then(r => r.data), () => mock.mockAddEvidenceToDispute(disputeId, '', imageUrl));
 export const resolveDispute = (disputeId: string, resolution: any) =>
   withFallback(http.post(`/disputes/${disputeId}/resolve`, resolution).then(r => r.data), () => mock.mockResolveDispute(disputeId, resolution));
 export const notifyDisputant = (disputeId: string, notification: any) =>
@@ -202,17 +212,17 @@ export const getSavedArticles = (userId: string) =>
   withFallback(http.get(`/users/${userId}/saved-articles`).then(r => r.data), () => mock.mockGetSavedArticles(userId));
 
 // AI Services
-export const apiGenerateArticleContent = mockGenerateArticleContent;
-export const apiGetGrowthAdvice = mockGetGrowthAdvice;
-export const getSemanticKeywords = mockGetSemanticKeywords;
-export const getPriceSuggestion = mockGetPriceSuggestion;
-export const generateTags = mockGenerateTags;
-export const generateListingContentFromAI = mockGenerateListingContentFromAI;
-export const getAgroBotResponse = mockGetAgroBotResponse;
-export const getRecipeFromIngredients = mockGetRecipeFromIngredients;
-export const generateMarketingText = mockGenerateMarketingText;
-export const apiAskAboutArticle = mockAskAboutArticle;
-export const apiPerformOcr = mockPerformOcrOnId;
+export const apiGenerateArticleContent = mock.mockGenerateArticleContent;
+export const apiGetGrowthAdvice = mock.mockGetGrowthAdvice;
+export const getSemanticKeywords = mock.mockGetSemanticKeywords;
+export const getPriceSuggestion = mock.mockGetPriceSuggestion;
+export const generateTags = mock.mockGenerateTags;
+export const generateListingContentFromAI = mock.mockGenerateListingContentFromAI;
+export const getAgroBotResponse = mock.mockGetAgroBotResponse;
+export const getRecipeFromIngredients = mock.mockGetRecipeFromIngredients;
+export const generateMarketingText = mock.mockGenerateMarketingText;
+export const apiAskAboutArticle = mock.mockAskAboutArticle;
+export const apiPerformOcr = mock.mockPerformOcrOnId;
 
 // Dispute AI helpers (network w/ fallback)
 export const generateDisputeSummary = (disputeId: string) =>
@@ -225,9 +235,9 @@ export const generateDisputeReplySuggestion = (disputeId: string, message: strin
   withFallback(http.post(`/disputes/${disputeId}/reply-suggestion`, { message }).then(r => r.data.suggestion), () => mock.mockGenerateDisputeReplySuggestion(disputeId, message));
 
 // Analytics & Public Info
-export const getSellerAnalytics = mockGetSellerAnalytics;
-export const getServiceAnalytics = mockGetServiceAnalytics;
-export const getAgriculturalTasks = mockGetAgriculturalTasks; // static; no network endpoint
+export const getSellerAnalytics = mock.mockGetSellerAnalytics;
+export const getServiceAnalytics = mock.mockGetServiceAnalytics;
+export const getAgriculturalTasks = mock.mockGetAgriculturalTasks; // static; no network endpoint
 
 // User-specific utilities
 export const getProduceSubscriptions = (userId: string) =>
@@ -313,3 +323,10 @@ export const submitSellerReview = (review: any) =>
 // platform settings remain mock for now
 export const getPlatformSettings = mock.mockGetPlatformSettings;
 export const updatePlatformSettings = mock.mockUpdatePlatformSettings;
+
+// Re-export mock helpers for components that import mock* helpers directly from api
+export const mockGetPlatformSettings = mock.mockGetPlatformSettings;
+export const mockUpdatePlatformSettings = mock.mockUpdatePlatformSettings;
+
+// Re-export all mock helpers for compatibility with components that import them
+export * from './mockApi';

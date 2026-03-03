@@ -70,8 +70,14 @@ app.use(hpp());
 
 // --- Routes ---
 
+// simple health check / informational endpoints
 app.get('/api', (req, res) => {
   res.send('AgroConnect API is running securely...');
+});
+
+// root route to prevent "Not Found - /" errors when someone hits backend directly
+app.get('/', (req, res) => {
+  res.send('AgroConnect backend active');
 });
 
 app.use('/api/users', authRoutes);

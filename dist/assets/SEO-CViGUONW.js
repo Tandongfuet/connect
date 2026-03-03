@@ -1,1 +1,0 @@
-import{r as o}from"./index-CBQO4Ma0.js";const s=({title:n,description:r,keywords:t})=>(o.useEffect(()=>{document.title=n;const a=(c,m)=>{let e=document.querySelector(`meta[name="${c}"]`);e||(e=document.createElement("meta"),e.setAttribute("name",c),document.head.appendChild(e)),e.setAttribute("content",m)};a("description",r),t&&a("keywords",t)},[n,r,t]),null);export{s as S};

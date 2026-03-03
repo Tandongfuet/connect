@@ -100,7 +100,7 @@ const updateListing = asyncHandler(async (req: Request, res: Response) => {
     }
 
     // Check if the user is the owner of the listing or an admin
-    if (listing.seller.id.toString() !== req.user!._id.toString() && req.user!.role !== 'Admin') {
+    if (!listing.seller || (listing.seller.id.toString() !== req.user!._id.toString() && req.user!.role !== 'Admin')) {
         res.status(401);
         throw new Error('User not authorized to update this listing');
     }
@@ -146,7 +146,7 @@ const deleteListing = asyncHandler(async (req: Request, res: Response) => {
         throw new Error('Listing not found');
     }
 
-    if (listing.seller.id.toString() !== req.user!._id.toString() && req.user!.role !== 'Admin') {
+    if (!listing.seller || (listing.seller.id.toString() !== req.user!._id.toString() && req.user!.role !== 'Admin')) {
         res.status(401);
         throw new Error('User not authorized to delete this listing');
     }

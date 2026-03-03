@@ -28,7 +28,9 @@ const getChatContacts = asyncHandler(async (req: Request, res: Response) => {
     const contactIds = new Set<string>();
 
     orders.forEach(order => {
-        const buyerId = isPopulated(order.buyerInfo.id) ? order.buyerInfo.id._id.toString() : order.buyerInfo.id.toString();
+        const buyerId = order.buyerInfo ? (isPopulated(order.buyerInfo.id) ? order.buyerInfo.id._id.toString() : order.buyerInfo.id.toString()) : '';
+
+        if (!buyerId) return;
 
         if (buyerId === userId.toString()) {
             // User is the buyer, add all sellers

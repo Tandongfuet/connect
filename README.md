@@ -92,6 +92,34 @@ Open your browser and navigate to the URL provided by the frontend server (usual
 
 ---
 
+## 🏗️ 6. Building & Previewing Production Assets
+
+To generate production-ready bundles and preview them locally:
+
+**Frontend**
+```bash
+# from project root
+npm install             # if not already installed
+npm run build           # create optimized `dist/` directory
+npm run preview -- --port 5173   # serve the build on port 5173
+```
+
+**Backend**
+```bash
+cd backend
+npm install             # ensure dependencies are present
+npm run build           # compile TypeScript to `dist/`
+# copy a `.env` from .env.example and fill values
+npm start               # starts the compiled server (port controlled by PORT env)
+```
+
+The backend exposes a simple root route (`GET /`) so you can hit the URL directly without getting a 404.
+
+Regardless of environment, you can still hit `/api` to confirm the API is running.
+
+
+---
+
 ## 👥 4. User Roles
 
 AgroConnect features a sophisticated role-based access control system to provide tailored experiences for every user.

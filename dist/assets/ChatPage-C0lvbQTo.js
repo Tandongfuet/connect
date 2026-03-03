@@ -1,1 +1,0 @@
-import{j as t}from"./index-CBQO4Ma0.js";import{C as r}from"./ChatInterface-C9mO7_rI.js";import"./FlagContentModal-CyLwkmpq.js";import"./Spinner-7xi39JA3.js";import"./MessageFeedSkeleton-CSmKnabv.js";const i=()=>t.jsx("div",{className:"h-[75vh] md:h-[80vh]",children:t.jsx(r,{isPage:!0})});export{i as default};

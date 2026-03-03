@@ -7,7 +7,7 @@ import type { Order, Booking, Dispute, User } from '../types';
  * @param subject The subject line of the email.
  * @param html The HTML body of the email.
  */
-const sendEmail = async (to: string, subject: string, html: string): Promise<void> => {
+export const sendEmail = async (to: string, subject: string, html: string): Promise<void> => {
     console.log('--- SIMULATING EMAIL ---');
     console.log(`To: ${to}`);
     console.log(`Subject: ${subject}`);
