@@ -22,10 +22,13 @@ const protect = asyncHandler(async (req: Request, res: Response, next: NextFunct
       }
       
       next();
-    } catch (error) {
-      console.error(error);
-      res.status(401);
-      throw new Error('Not authorized, token failed');
+    } catch (error: any) {
+      // Ignore malformed or expired tokens; do not spam logs
+      if (error.name && error.name !== 'JsonWebTokenError') {
+        console.error('Auth error:', error);
+      }
+      // proceed without setting req.user (unauthenticated)
+      return next();
     }
   }
 
