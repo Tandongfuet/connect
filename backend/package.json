@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "clear:test-data": "ts-node-dev --respawn --transpile-only src/scripts/clearTestData.ts"
   },
   "author": "EFUELATEH GEORGE",
   "license": "MIT",

@@ -18,6 +18,7 @@ const router = express.Router();
 router.use(protect);
 
 router.route('/').post(submitDispute).get(getDisputesByUser);
+router.route('/user/:id').get(getDisputesByUser); // compatibility for fetching by id
 router.route('/all').get(admin, getAllDisputes); // Admin only
 router.route('/:id').get(getDisputeById);
 router.route('/:id/message').post(addMessageToDispute);

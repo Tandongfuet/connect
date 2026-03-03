@@ -96,10 +96,19 @@ const submitDispute = asyncHandler(async (req: Request, res: Response) => {
 
 // @desc    Get disputes for the logged-in user
 // @route   GET /api/disputes
+// @route   GET /api/disputes/user/:id  (admin or self)
 // @access  Private
 const getDisputesByUser = asyncHandler(async (req: Request, res: Response) => {
+    let userId = req.user!._id;
+    if (req.params.id) {
+        if (req.user!.role !== Role.Admin && req.user!._id.toString() !== req.params.id) {
+            res.status(403);
+            throw new Error('Not authorized to view these disputes');
+        }
+        userId = req.params.id as any;
+    }
     const disputes = await Dispute.find({ 
-        $or: [{ buyerId: req.user!._id }, { sellerId: req.user!._id }] 
+        $or: [{ buyerId: userId }, { sellerId: userId }] 
     }).sort({ createdAt: -1 });
     res.json(disputes);
 });

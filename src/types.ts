@@ -329,6 +329,7 @@ export interface Testimonial {
   location: string;
   quote: string;
   rating: number;
+  videoUrl?: string; // optional link to a testimonial video
 }
 
 

@@ -6,11 +6,27 @@ import { TransactionType, TransactionStatus } from '../constants';
 
 // @desc    Get transactions for logged in user
 // @route   GET /api/transactions
+// @route   GET /api/transactions/user/:id  (admin or self)
 // @access  Private
 const getMyTransactions = asyncHandler(async (req: Request, res: Response) => {
     const transactions = await Transaction.find({ userId: req.user!._id }).sort({ date: -1 });
     res.json(transactions);
 });
+
+// compatibility: fetch by user id parameter
+const getTransactionsByUser = asyncHandler(async (req: Request, res: Response) => {
+    const requestedId = req.params.id;
+    if (!requestedId) {
+        return getMyTransactions(req, res);
+    }
+    if (req.user!.role !== 'Admin' && req.user!._id.toString() !== requestedId) {
+        res.status(403);
+        throw new Error('Not authorized to view these transactions');
+    }
+    const transactions = await Transaction.find({ userId: requestedId }).sort({ date: -1 });
+    res.json(transactions);
+});
+
 
 // @desc    Deposit funds into user wallet
 // @route   POST /api/transactions/deposit
@@ -121,4 +137,4 @@ const transferFunds = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-export { getMyTransactions, depositFunds, withdrawFunds, transferFunds };
+export { getMyTransactions, getTransactionsByUser, depositFunds, withdrawFunds, transferFunds };

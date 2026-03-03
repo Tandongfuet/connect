@@ -16,7 +16,8 @@ import {
     getSellerReviews,
     getUserFollowers,
     getUserFollowing,
-    getUserFeed
+    getUserFeed,
+    getSavedArticles
 } from '../controllers/userController';
 
 const router = express.Router();
@@ -34,7 +35,9 @@ router.route('/follow/:id').put(protect, toggleFollow);
 router.route('/:id/followers').get(getUserFollowers);
 
 // @route   GET /api/users/:id/following
+// support alias /api/users/following for current user
 router.route('/:id/following').get(getUserFollowing);
+router.route('/following').get(protect, getUserFollowing);
 
 // @route   GET /api/users/:id/feed
 router.route('/:id/feed').get(protect, getUserFeed);
@@ -43,6 +46,9 @@ router.route('/:id/feed').get(protect, getUserFeed);
 router.route('/wishlist')
     .get(protect, getWishlist)
     .post(protect, addToWishlist);
+
+// compatibility saved articles endpoint
+router.route('/:id/saved-articles').get(getSavedArticles);
 
 // @route   DELETE /api/users/wishlist/:listingId
 router.route('/wishlist/:listingId').delete(protect, removeFromWishlist);

@@ -32,6 +32,19 @@ const getTestimonials = asyncHandler(async (req: Request, res: Response) => {
   res.json(testimonials);
 });
 
+// @desc    Submit a new testimonial
+// @route   POST /api/public/testimonials
+// @access  Authenticated users (for now)
+const createTestimonial = asyncHandler(async (req: Request, res: Response) => {
+  const { author, location, quote, rating, videoUrl } = req.body;
+  if (!author || !location || !quote || rating === undefined) {
+    res.status(400);
+    throw new Error('Missing required testimonial fields');
+  }
+  const newTestimonial = await Testimonial.create({ author, location, quote, rating, videoUrl });
+  res.status(201).json(newTestimonial);
+});
+
 
 // @desc    Global search across listings/users/articles
 // @route   GET /api/public/search?q=...
@@ -65,4 +78,4 @@ const submitContact = asyncHandler(async (req: Request, res: Response) => {
   res.json({ success: true });
 });
 
-export { getEvents, getBadges, getTestimonials, globalSearch, submitContact };
+export { getEvents, getBadges, getTestimonials, createTestimonial, globalSearch, submitContact };

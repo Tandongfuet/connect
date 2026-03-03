@@ -47,3 +47,6 @@ The API follows a standard RESTful pattern:
 *   **Routes (`/src/routes`):** Define the API endpoints (e.g., `/api/users`, `/api/listings`).
 *   **Controllers (`/src/controllers`):** Contain the business logic for each route.
 *   **Middleware (`/src/middleware`):** Includes functions for authentication (`authMiddleware`) and error handling.
+## Testimonials
+
+A public endpoint (GET /api/public/testimonials) returns community testimonials. The server automatically seeds a few example entries when the collection is empty. Authenticated users can submit new testimonials via POST /api/public/testimonials (use a bearer token).

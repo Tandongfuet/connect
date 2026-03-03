@@ -327,6 +327,7 @@ export interface Testimonial {
   location: string;
   quote: string;
   rating: number;
+  videoUrl?: string;
 }
 
 

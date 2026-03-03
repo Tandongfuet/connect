@@ -105,17 +105,35 @@ const payForBooking = asyncHandler(async (req: Request, res: Response) => {
 
 // @desc    Get bookings for the logged-in user
 // @route   GET /api/bookings/user
+// @route   GET /api/bookings/user/:id  (admin or owner)
 // @access  Private
 const getBookingsByUser = asyncHandler(async (req: Request, res: Response) => {
-    const bookings = await Booking.find({ userId: req.user!._id }).sort({ createdAt: -1 });
+    let targetId = req.user!._id;
+    if (req.params.id) {
+        if (req.user!.role !== 'Admin' && req.user!._id.toString() !== req.params.id) {
+            res.status(403);
+            throw new Error('Not authorized to view these bookings');
+        }
+        targetId = req.params.id as any;
+    }
+    const bookings = await Booking.find({ userId: targetId }).sort({ createdAt: -1 });
     res.json(bookings);
 });
 
 // @desc    Get bookings for the logged-in provider
 // @route   GET /api/bookings/provider
+// @route   GET /api/bookings/provider/:id  (admin or provider themselves)
 // @access  Private
 const getBookingsByProvider = asyncHandler(async (req: Request, res: Response) => {
-    const bookings = await Booking.find({ providerId: req.user!._id }).sort({ createdAt: -1 });
+    let targetId = req.user!._id;
+    if (req.params.id) {
+        if (req.user!.role !== 'Admin' && req.user!._id.toString() !== req.params.id) {
+            res.status(403);
+            throw new Error('Not authorized to view these bookings');
+        }
+        targetId = req.params.id as any;
+    }
+    const bookings = await Booking.find({ providerId: targetId }).sort({ createdAt: -1 });
     res.json(bookings);
 });
 

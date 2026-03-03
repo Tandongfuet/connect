@@ -105,12 +105,12 @@ export const submitListingReview = (id: string, review: any) =>
   withFallback(http.post(`/listings/${id}/reviews`, review).then(r => r.data), () => mock.mockSubmitListingReview(id, review));
 
 // Wishlist / Favorites (wrapped with network fallback)
-export const getWishlist = (userId: string) =>
-  withFallback(http.get(`/users/${userId}/wishlist`).then(r => r.data), () => mock.mockGetWishlist(userId));
-export const addToWishlist = (userId: string, listingId: string) =>
-  withFallback(http.post(`/users/${userId}/wishlist`, { listingId }).then(r => r.data), () => mock.mockAddToWishlist(userId, listingId));
-export const removeFromWishlist = (userId: string, listingId: string) =>
-  withFallback(http.delete(`/users/${userId}/wishlist/${listingId}`).then(r => r.data), () => mock.mockRemoveFromWishlist(userId, listingId));
+export const getWishlist = (userId?: string) =>
+  withFallback(http.get(`/users/wishlist`).then(r => r.data), () => mock.mockGetWishlist(userId || ''));
+export const addToWishlist = (_userId: string, listingId: string) =>
+  withFallback(http.post(`/users/wishlist`, { listingId }).then(r => r.data), () => mock.mockAddToWishlist(_userId, listingId));
+export const removeFromWishlist = (_userId: string, listingId: string) =>
+  withFallback(http.delete(`/users/wishlist/${listingId}`).then(r => r.data), () => mock.mockRemoveFromWishlist(_userId, listingId));
 
 // Orders
 export const createOrder = (order: any) =>
@@ -129,10 +129,10 @@ export const cancelOrder = (orderId: string) =>
 // Bookings
 export const createBooking = (booking: any) =>
   withFallback(http.post('/bookings', booking).then(r => r.data), () => mock.mockCreateBooking(booking));
-export const getBookingsByUser = (userId: string) =>
-  withFallback(http.get(`/bookings/user/${userId}`).then(r => r.data), () => mock.mockGetBookingsByUser(userId));
-export const getBookingsByProvider = (providerId: string) =>
-  withFallback(http.get(`/bookings/provider/${providerId}`).then(r => r.data), () => mock.mockGetBookingsByProvider(providerId));
+export const getBookingsByUser = (userId?: string) =>
+  withFallback(http.get(`/bookings/user`).then(r => r.data), () => mock.mockGetBookingsByUser(userId || ''));
+export const getBookingsByProvider = (providerId?: string) =>
+  withFallback(http.get(`/bookings/provider`).then(r => r.data), () => mock.mockGetBookingsByProvider(providerId || ''));
 export const updateBookingStatus = (bookingId: string, status: string) =>
   withFallback(http.put(`/bookings/${bookingId}/status`, { status }).then(r => r.data), () => mock.mockUpdateBookingStatus(bookingId, status));
 export const payForBooking = (bookingId: string, payment: any) =>
@@ -143,8 +143,8 @@ export const cancelBooking = (bookingId: string) =>
   withFallback(http.post(`/bookings/${bookingId}/cancel`).then(r => r.data), () => mock.mockCancelBooking(bookingId));
 
 // Wallet & Transactions
-export const getTransactions = (userId: string) =>
-  withFallback(http.get(`/transactions/user/${userId}`).then(r => r.data), () => mock.mockGetTransactions(userId));
+export const getTransactions = (userId?: string) =>
+  withFallback(http.get(`/transactions`).then(r => r.data), () => mock.mockGetTransactions(userId || ''));
 export const getAllTransactions = () =>
   withFallback(http.get('/transactions').then(r => r.data), () => mock.mockGetAllTransactions());
 export const depositFunds = (userId: string, amount: number) =>
@@ -155,8 +155,8 @@ export const transferFunds = (fromId: string, toId: string, amount: number) =>
   withFallback(http.post('/transactions/transfer', { fromId, toId, amount }).then(r => r.data), () => mock.mockTransferFunds(fromId, toId, amount));
 
 // Disputes
-export const getDisputesByUser = (userId: string) =>
-  withFallback(http.get(`/disputes/user/${userId}`).then(r => r.data), () => mock.mockGetDisputesByUser(userId));
+export const getDisputesByUser = (userId?: string) =>
+  withFallback(http.get(`/disputes`).then(r => r.data), () => mock.mockGetDisputesByUser(userId || ''));
 export const getDisputeById = (id: string) =>
   withFallback(http.get(`/disputes/${id}`).then(r => r.data), () => mock.mockGetDisputeById(id));
 export const getAllDisputes = () =>
@@ -256,6 +256,12 @@ export const getBadges = () =>
   withFallback(http.get('/public/badges').then(r => r.data), () => mock.mockGetBadges());
 export const getTestimonials = () =>
   withFallback(http.get('/public/testimonials').then(r => r.data), () => mock.mockGetTestimonials());
+
+export const submitTestimonial = (testimonial: any) =>
+  withFallback(
+    http.post('/public/testimonials', testimonial).then(r => r.data),
+    () => mock.mockSubmitTestimonial(testimonial)
+  );
 
 // Contact & Search
 export const submitContactForm = (data: any) =>

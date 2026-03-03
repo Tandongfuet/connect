@@ -14,6 +14,7 @@ import ProductCarousel from '../components/ProductCarousel';
 import SEO from '../components/SEO';
 import TestimonialCard from '../components/TestimonialCard';
 import BookingModal from '../components/BookingModal';
+import SubmitTestimonialModal from '../components/SubmitTestimonialModal';
 
 
 // New hero image: Golden Hour Harvest Field
@@ -30,6 +31,8 @@ const LandingPage: React.FC = () => {
   
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedListingForBooking, setSelectedListingForBooking] = useState<Listing | null>(null);
+
+  const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
 
   const handleBookNow = (listing: Listing) => {
     setSelectedListingForBooking(listing);
@@ -246,9 +249,21 @@ const LandingPage: React.FC = () => {
       {/* What Our Community Says - New Carousel */}
       {testimonials.length > 0 && (
           <section className="py-20 bg-green-50/50 dark:bg-dark-surface/30">
+            <SubmitTestimonialModal
+                isOpen={isTestimonialModalOpen}
+                onClose={() => setIsTestimonialModalOpen(false)}
+                onSuccess={t => setTestimonials(prev => [...prev, t])}
+            />
+
             <div className="container mx-auto text-center">
                 <h2 className="text-3xl font-bold text-slate-dark dark:text-dark-text mb-2">What Our Community Says</h2>
-                <p className="text-gray-muted dark:text-dark-muted mb-12">Real stories from farmers, buyers, and service providers.</p>
+                <p className="text-gray-muted dark:text-dark-muted mb-4">Real stories from farmers, buyers, and service providers.</p>
+                <button
+                    onClick={() => setIsTestimonialModalOpen(true)}
+                    className="btn btn-outline btn-primary mb-8"
+                >
+                    Share Your Experience
+                </button>
 
                 {loadingTestimonials ? (
                     <div className="flex justify-center"><Spinner /></div>

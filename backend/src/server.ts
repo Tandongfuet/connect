@@ -30,7 +30,10 @@ import publicRoutes from './routes/publicRoutes';
 dotenv.config();
 
 // Connect to the database
-connectDB();
+connectDB().then(() => {
+  // optional seeding for demo data
+  import('./seeder').then(m => m.seedTestimonials().catch(console.error));
+}).catch(err => console.error('DB connect failed during startup', err));
 
 const app = express();
 const httpServer = http.createServer(app); // Create HTTP server
@@ -58,6 +61,10 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
+
+// Trust first proxy (needed if running behind a load balancer or reverse proxy)
+// prevents errors from express-rate-limit about X-Forwarded-For header.
+app.set('trust proxy', 1);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10mb' })); 

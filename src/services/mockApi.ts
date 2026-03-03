@@ -102,7 +102,30 @@ const getInitialDbState = () => {
         activityLogs: [] as ActivityLog[],
         transactions: [] as Transaction[],
         sellerReviews: [] as SellerReview[],
-        testimonials: [] as Testimonial[],
+        testimonials: [
+            {
+                id: 'testi1',
+                author: 'Fatima Ngassa',
+                location: 'Bamenda',
+                quote: 'AgroConnect helped me sell my cassava quickly and reach buyers across regions!',
+                rating: 5
+            },
+            {
+                id: 'testi2',
+                author: 'Samuel Eko',
+                location: 'Douala',
+                quote: 'The platform makes it easy to connect with buyers and the escrow system gives me peace of mind.',
+                rating: 4
+            },
+            {
+                id: 'testi3',
+                author: 'Lydia T',
+                location: 'Yaoundé',
+                quote: 'I love how simple and reliable AgroConnect is. My produce moves faster now.',
+                rating: 5,
+                videoUrl: 'https://example.com/video/testimonial3.mp4'
+            }
+        ] as Testimonial[],
         badges: [] as Badge[],
         events: [] as Event[],
     });
@@ -1005,6 +1028,13 @@ export const mockToggleFollow = async (c: string, t: string) => {
 export const mockGetEvents = async () => db.events;
 export const mockGetBadges = async () => db.badges;
 export const mockGetTestimonials = async () => db.testimonials;
+
+export const mockSubmitTestimonial = async (t: Partial<Testimonial>) => {
+    const newTestimonial = { ...t, id: `testi_${Date.now()}` } as Testimonial;
+    db.testimonials.push(newTestimonial);
+    saveDb();
+    return newTestimonial;
+};
 export const mockGetChatContacts = async (userId: string) => [];
 export const mockGetMessagesBetweenUsers = async (userId1: string, userId2: string) => [];
 export const mockSendMessage = async (sender: User, receiverId: string, content: string) => ({ id: 'm1', content: 'sent' });

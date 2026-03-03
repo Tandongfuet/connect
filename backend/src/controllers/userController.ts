@@ -102,8 +102,15 @@ const getUserFollowers = asyncHandler(async (req: Request, res: Response) => {
 // @desc    Get users followed by a user
 // @route   GET /api/users/:id/following
 // @access  Public
+// also supports requesting the current user's following via /api/users/following (alias)
 const getUserFollowing = asyncHandler(async (req: Request, res: Response) => {
-    const user = await User.findById(req.params.id).populate('following', 'name email role profileImage verificationTier');
+    // allow either param or authenticated user
+    const userId = req.params.id || (req.user && req.user._id.toString());
+    if (!userId) {
+        res.status(400);
+        throw new Error('Missing user id');
+    }
+    const user = await User.findById(userId).populate('following', 'name email role profileImage verificationTier');
     if (user) {
         res.json(user.following);
     } else {
@@ -163,9 +170,23 @@ const getUserFeed = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/users/wishlist
 // @access  Private
 const getWishlist = asyncHandler(async (req: Request, res: Response) => {
-    const user = await User.findById(req.user!._id).populate('wishlist');
+    const userId = req.user!._id;
+    const user = await User.findById(userId).populate('wishlist');
     if (user) {
         res.json(user.wishlist);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+// @desc    Get saved articles of a user (compatibility)
+// @route   GET /api/users/:id/saved-articles
+// @access  Public
+const getSavedArticles = asyncHandler(async (req: Request, res: Response) => {
+    const user = await User.findById(req.params.id).populate('savedArticleIds');
+    if (user) {
+        res.json(user.savedArticleIds);
     } else {
         res.status(404);
         throw new Error('User not found');
@@ -355,5 +376,6 @@ export {
     getProduceSubscriptions,
     toggleProduceSubscription,
     createSellerReview,
-    getSellerReviews
+    getSellerReviews,
+    getSavedArticles
 };

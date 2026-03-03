@@ -117,6 +117,32 @@ The backend exposes a simple root route (`GET /`) so you can hit the URL directl
 
 Regardless of environment, you can still hit `/api` to confirm the API is running.
 
+---
+
+## 🧹 Clearing Test Data (Development Only)
+
+A helper script is available in the backend to remove seeded/test records from the database:
+
+```bash
+# from backend folder
+npm run clear:test-data
+```
+
+It deletes users with `test` in their email or flagged `isTestUser`, sample testimonials, and other leftover demo documents. **Do not run this against a production database unless you are absolutely sure and have backups.**
+
+---
+
+## 🤖 AI Features
+
+Several parts of the backend rely on an AI provider (Google GenAI). To enable them, set `API_KEY` in the backend `.env` file:
+
+```
+API_KEY=your_google_genai_api_key
+```
+
+If the key is missing the server will log warnings and the routes will return fallback/empty content. This does not prevent the rest of the application from working normally.
+
+
 
 ---
 
